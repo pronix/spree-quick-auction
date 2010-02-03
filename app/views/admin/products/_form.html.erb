@@ -42,11 +42,11 @@
       <% unless @product.has_variants? %>
         <p>
           <%= f.label :on_hand, t("on_hand")%><br />
-          <%= f.text_field :on_hand, :size => 4 %>
+          <%= f.text_field :on_hand, :size => 4, :readonly => (true if !@product.prices.blank?) %>
         </p>
         <p>
           <%= f.label :step, t("step", :default => 'Step')%><br />
-          <%= f.text_field :step, :size => 4 %>
+          <%= f.text_field :step, :size => 4, :readonly => (true if !@product.prices.blank?) %>
         </p>
         <ul id="shipping-specs">
           <li>
