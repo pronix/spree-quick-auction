@@ -26,13 +26,13 @@
       <p>
         <%= f.label :available_on, t("available_on") %><br />
         <%= f.error_message_on :available_on %>
-        <%= f.unobtrusive_date_text_picker :available_on %>
+        <%= f.unobtrusive_date_text_picker :available_on %><input type="text" id="time2" size="10" />
       </p>
                                                           
       <p>
         <%= f.label :available_off, t("available_off", :default => 'Avaible off') %><br />
         <%= f.error_message_on :available_off %>
-        <%= f.unobtrusive_date_text_picker :available_off %>
+        <%= f.unobtrusive_datetime_picker :available_off %>
       </p>
 
       <p>
@@ -72,7 +72,13 @@
           <tr>
           <% @product.prices.each_with_index do |price,index| %>
             <%= '</tr><tr>' if index % 10 == 0 %>
-              <td><%= price.price %></td>
+              <td>
+                <% if price.sold %>
+                  <h1><%= link_to price.price, '#', :class => 'price_change_link', :id => price.id %></h1>
+                <% else %>
+                  <%= link_to price.price, '#', :class => 'price_change_link', :id => price.id %>
+                <% end %>
+              </td>
           <% end %>
           </tr>
         </table>
@@ -111,3 +117,9 @@
     <%= render :partial => "admin/shared/additional_field", :locals => {:field => field, :f => f} %>
   <% end %>
 <% end %>
+
+<script type="text/javascript" charset="utf-8">
+$(".price_change_link").click(function() {
+    $.post("<%= change_price_path %>", { price_id: $(this).attr('id'), product_id: <%= @product.id %>  });
+});
+</script>
