@@ -17,14 +17,26 @@ class QuickAuctionExtension < Spree::Extension
     Product.class_eval do
       has_many :prices
       
-      after_create :add_prices
-
-      def add_prices
-        return if self.count_on_hand == 0
-        count_on_hand.times.each do |price|
-          self.prices.create(:price => (price + 1) * self.step)
+      before_update :change_prices
+      
+      def change_prices
+        if self.count_on_hand_changed?
+          if self.count_on_hand != 0
+            self.count_on_hand.times.each do |price|
+              self.prices.create(:price => (price + 1) * self.step)
+            end
+          end
         end
       end
+      
+      # after_create :add_prices
+
+      # def add_prices
+      #   return if self.count_on_hand == 0
+      #   count_on_hand.times.each do |price|
+      #     self.prices.create(:price => (price + 1) * self.step)
+      #   end
+      # end
       
     end
     

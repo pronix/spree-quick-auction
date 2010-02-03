@@ -44,6 +44,10 @@
           <%= f.label :on_hand, t("on_hand")%><br />
           <%= f.text_field :on_hand, :size => 4 %>
         </p>
+        <p>
+          <%= f.label :step, t("step", :default => 'Step')%><br />
+          <%= f.text_field :step, :size => 4 %>
+        </p>
         <ul id="shipping-specs">
           <li>
             <%= f.label :weight, t("weight")%>
