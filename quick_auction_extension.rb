@@ -13,6 +13,27 @@ class QuickAuctionExtension < Spree::Extension
   # end
   
   def activate
+    
+    Product.class_eval do
+      has_many :prices
+      
+      after_create :add_prices
+
+      def add_prices
+        return if self.count_on_hand == 0
+        count_on_hand.times.each do |price|
+          self.prices.create(:price => (price + 1) * self.step)
+        end
+      end
+      
+    end
+    
+    # Admin::ProductsController.class_eval do
+    #   before_filter :add_parts_tab
+    #   def add_parts_tab
+    #     @product << { :name => "HELLLOO", :url => "" }
+    #   end
+    # end
 
     # make your helper avaliable in all views
     # Spree::BaseController.class_eval do
