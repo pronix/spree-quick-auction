@@ -67,6 +67,17 @@
           </li>
         </ul>
       <% end %>
+      
+        <table border="1">
+          <tr>
+          <% @product.prices.each_with_index do |price,index| %>
+            <%= '</tr><tr>' if index % 10 == 0 %>
+              <td><%= price.price %></td>
+          <% end %>
+          </tr>
+        </table>
+      
+
       <p>
         <%= f.label :shipping_category_id, t("shipping_categories")%><br />
         <%= f.collection_select(:shipping_category_id, @shipping_categories, :id, :name, {:include_blank => true}, {"style" => "width:200px"}) %>

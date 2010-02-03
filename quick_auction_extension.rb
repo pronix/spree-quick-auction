@@ -29,16 +29,7 @@ class QuickAuctionExtension < Spree::Extension
         end
       end
       
-      # after_create :add_prices
-
-      # def add_prices
-      #   return if self.count_on_hand == 0
-      #   count_on_hand.times.each do |price|
-      #     self.prices.create(:price => (price + 1) * self.step)
-      #   end
-      # end
-      
-    end
+     end
     
     # Admin::ProductsController.class_eval do
     #   before_filter :add_parts_tab
