@@ -14,10 +14,15 @@ class QuickAuctionExtension < Spree::Extension
   
   def activate
     
+    # AppConfiguration.class_eval do
+    #   preference :stylesheets, :string, :default => 'style_hz'
+    # end
+    
     Product.class_eval do
       has_many :prices
       
       before_update :change_prices
+      after_update :change_time
       
       def change_prices
         if self.count_on_hand_changed?
@@ -29,7 +34,28 @@ class QuickAuctionExtension < Spree::Extension
         end
       end
       
+      def change_time
+        self.available_on - 100.hours
+      end
+      
      end
+    
+    # Admin::ProductsController.class_eval do
+    #   before_filter :change_time, :only => :update
+      
+    #   def change_time
+    #     params[:product][:available_off] = Time.parse(params[:product][:available_off]) - 5.hours
+    #     # product = Product.find_by_name(params[:product][:name])
+    #     # product.update_attributes(:available_off => params[:product][:available_off])
+    #     # Rails.logger.info [" [ zaebalo: ] ", product.try(:id)].join
+    #     # params[:product][:available_off] = Time.parse(params[:product][:available_off]).to_s(:db)
+    #     # params[:product][:available_on] = Time.parse(params[:product][:available_on]).to_s(:db)
+    #     # if params[:product]
+    #     #   params[:product][:available_off] = Time.parse(params[:product][:available_off]) if !params[:product][:available_off].blank?
+    #     # end
+    #      # Rails.logger.info [" [ Dwnload file: ] ", params[:product][:available_off]].join
+    #   end
+    # end
     
     # Admin::ProductsController.class_eval do
     #   before_filter :add_parts_tab

@@ -1,3 +1,4 @@
+<script src="/javascripts/jquery_ui_datepicker.js" type="text/javascript"></script>
 <div class="yui-gc">
   <div class="yui-u first">
     <%- locals = {:f => f} -%>
@@ -26,13 +27,13 @@
       <p>
         <%= f.label :available_on, t("available_on") %><br />
         <%= f.error_message_on :available_on %>
-        <%= f.unobtrusive_date_text_picker :available_on %><input type="text" id="time2" size="10" />
+        <%= f.text_field :available_on, :class => 'pickerfield' %>
       </p>
                                                           
       <p>
         <%= f.label :available_off, t("available_off", :default => 'Avaible off') %><br />
         <%= f.error_message_on :available_off %>
-        <%= f.unobtrusive_datetime_picker :available_off %>
+        <%= f.text_field :available_off, :class => 'pickerfield' %>
       </p>
 
       <p>
@@ -122,4 +123,15 @@
 $(".price_change_link").click(function() {
     $.post("<%= change_price_path %>", { price_id: $(this).attr('id'), product_id: <%= @product.id %>  });
 });
+$(function() {
+  $('.pickerfield').datetime({
+    userLang        : 'en',
+    americanMode: true,
+  });
+});
 </script>
+
+
+<script src="/javascripts/timepicker.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="/stylesheets/style_hz.css">
+<link rel="stylesheet" type="text/css" href="/stylesheets/jquery_ui_datepicker.css">
