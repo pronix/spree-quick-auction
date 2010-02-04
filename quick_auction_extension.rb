@@ -16,6 +16,7 @@ class QuickAuctionExtension < Spree::Extension
     
     Product.class_eval do
       has_many :prices
+      has_many :product_sizes
       
       before_update :change_prices
       

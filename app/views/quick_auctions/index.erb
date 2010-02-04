@@ -16,9 +16,9 @@
       <%= '</tr><tr>' if index % 10 == 0 %>
       <td>
         <% if price.sold %>
-          <h1><%= link_to price.price, '#', :class => 'price_change_link', :id => price.id %></h1>
+          <%= price.id %>
         <% else %>
-          <%= link_to price.price, '#', :class => 'price_change_link', :id => price.id %>
+          <%= link_to price.price, checkout_price_path(:price_id => price.id), :class => 'price_change_link', :id => price.id %>
         <% end %>
       </td>
     <% end %>

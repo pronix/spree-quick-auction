@@ -14,6 +14,10 @@ class QuickAuctionsController < ApplicationController
     render :nothing => true
   end
   
+  def checkout
+    @price = Price.find(params[:price_id])
+  end
+  
   # def update
   #   price = Product.find(params[:id].to_i).prices.find(params[:price_id].to_i)
   #   if price.sold
