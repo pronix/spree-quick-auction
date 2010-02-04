@@ -14,10 +14,6 @@ class QuickAuctionExtension < Spree::Extension
   
   def activate
     
-    # AppConfiguration.class_eval do
-    #   preference :stylesheets, :string, :default => 'style_hz'
-    # end
-    
     Product.class_eval do
       has_many :prices
       

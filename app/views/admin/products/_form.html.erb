@@ -27,7 +27,7 @@
       <p>
         <%= f.label :available_on, t("available_on") %><br />
         <%= f.error_message_on :available_on %>
-        <%= f.text_field :available_on, :class => 'pickerfield' %>
+        <%= f.text_field :available_on, :value => (@product.available_on ? @product.available_on.to_s(:db) : Time.now.strftime("%Y-%m-%d %H:%M:%S")), :class => 'pickerfield' %>
       </p>
                                                           
       <p>

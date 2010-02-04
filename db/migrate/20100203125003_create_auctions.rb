@@ -2,6 +2,8 @@ class CreateAuctions < ActiveRecord::Migration
   def self.up
     add_column :products, :available_off, :datetime, :null => false, :default => Time.now + 1.day
     add_column :products, :step, :integer, :null => false, :default => 1
+    remove_column :products, :count_on_hand
+    add_column :products, :count_on_hand, :integer, :null => false, :default => 0
   end
 
   def self.down

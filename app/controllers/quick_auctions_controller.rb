@@ -1,7 +1,7 @@
 class QuickAuctionsController < ApplicationController
   
   def index
-    @product = Product.last
+    @product = Product.find(459084718)
   end
  
   def create
