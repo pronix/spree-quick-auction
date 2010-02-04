@@ -22,7 +22,6 @@ class QuickAuctionExtension < Spree::Extension
       has_many :prices
       
       before_update :change_prices
-      after_update :change_time
       
       def change_prices
         if self.count_on_hand_changed?
@@ -34,8 +33,12 @@ class QuickAuctionExtension < Spree::Extension
         end
       end
       
-      def change_time
-        self.available_on - 100.hours
+      def available_on=(orig_date)
+        write_attribute(:available_on, orig_date)
+      end
+      
+      def available_off=(orig_date)
+        write_attribute(:available_off, orig_date)
       end
       
      end
