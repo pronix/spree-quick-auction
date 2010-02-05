@@ -40,15 +40,18 @@
         <%= f.label :sku, t("sku") %><br />
         <%= f.text_field :sku, :size => 16 %>
       </p>
+
+      <p>
+        <%= f.label :on_hand, t("on_hand")%><br />
+        <%= f.text_field :on_hand, :size => 4, :readonly => (true if !@product.variants.blank?) %>
+      </p>
+      <p>
+        <%= f.label :step, t("step", :default => 'Step')%><br />
+        <%= f.text_field :step, :size => 4, :readonly => (true if !@product.variants.blank?) %>
+      </p>
+
       <% unless @product.has_variants? %>
-        <p>
-          <%= f.label :on_hand, t("on_hand")%><br />
-          <%= f.text_field :on_hand, :size => 4, :readonly => (true if !@product.prices.blank?) %>
-        </p>
-        <p>
-          <%= f.label :step, t("step", :default => 'Step')%><br />
-          <%= f.text_field :step, :size => 4, :readonly => (true if !@product.prices.blank?) %>
-        </p>
+
         <ul id="shipping-specs">
           <li>
             <%= f.label :weight, t("weight")%>
@@ -68,22 +71,6 @@
           </li>
         </ul>
       <% end %>
-      
-        <table border="1">
-          <tr>
-          <% @product.prices.each_with_index do |price,index| %>
-            <%= '</tr><tr>' if index % 10 == 0 %>
-              <td>
-                <% if price.sold %>
-                  <h1><%= link_to price.price, '#', :class => 'price_change_link', :id => price.id %></h1>
-                <% else %>
-                  <%= link_to price.price, '#', :class => 'price_change_link', :id => price.id %>
-                <% end %>
-              </td>
-          <% end %>
-          </tr>
-        </table>
-      
 
       <p>
         <%= f.label :shipping_category_id, t("shipping_categories")%><br />

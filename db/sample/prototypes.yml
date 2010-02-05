@@ -1,0 +1,5 @@
+proto_shirts:
+  id: 1
+  name: Shirt
+  created_at: <%= Time.now %>
+  updated_at: <%= Time.now %>

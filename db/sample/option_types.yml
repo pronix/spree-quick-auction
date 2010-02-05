@@ -1,0 +1,16 @@
+<% index = 1 %>
+option_type_<%= index %>:
+  id: <%= index %>
+  name: size
+  presentation: Size
+  created_at: <%= Time.now %>
+  updated_at: <%= Time.now %>
+  <% index += 1 %>
+
+option_type_<%= index %>:
+  id: <%= index %>
+  name: sex
+  presentation: Sex
+  created_at: <%= Time.now %>
+  updated_at: <%= Time.now %>
+  <% index += 1 %>

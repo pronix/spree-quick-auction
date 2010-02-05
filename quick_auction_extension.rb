@@ -15,16 +15,20 @@ class QuickAuctionExtension < Spree::Extension
   def activate
     
     Product.class_eval do
-      has_many :prices
-      has_many :product_sizes
+      # has_many :prices
+      # has_many :product_sizes
       
-      before_update :change_prices
+      # before_create :change_prices
       
-      def change_prices
-        if self.count_on_hand_changed?
-          if self.count_on_hand != 0
-            self.count_on_hand.times.each do |price|
-              self.prices.create(:price => (price + 1) * self.step)
+      def change_variants
+        if self.count_on_hand != 0
+          counts = self.count_on_hand
+          counts.times.each do |price|
+            variant = self.variants.create(:sku => self.sku + '_' + price.to_s,
+                                           :price => (price + 1) * self.step,
+                                           :count_on_hand => 1)
+            self.option_types.each do |option_type|
+              variant.option_values << option_type.option_values.last
             end
           end
         end
@@ -38,10 +42,26 @@ class QuickAuctionExtension < Spree::Extension
         write_attribute(:available_off, orig_date)
       end
       
-     end
+    end
     
-    # Admin::ProductsController.class_eval do
-    #   before_filter :change_time, :only => :update
+    ProductsController.class_eval do
+      before_filter :find_price, :only => :show
+      
+      def find_price
+        @price = Price.find(params[:price_id])
+        redirect_to root_path if @price.sold
+      end
+      
+    end
+    
+    Admin::ProductsController.class_eval do
+      after_filter :change_prices, :only => :update
+      
+      def change_prices
+        @product.change_variants
+      end
+      
+    end
       
     #   def change_time
     #     params[:product][:available_off] = Time.parse(params[:product][:available_off]) - 5.hours
@@ -69,4 +89,5 @@ class QuickAuctionExtension < Spree::Extension
     #   helper YourHelper
     # end
   end
+    
 end

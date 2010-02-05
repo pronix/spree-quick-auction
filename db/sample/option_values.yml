@@ -1,0 +1,50 @@
+<% index = 1 %>
+option_value_<%= index %>:
+  id: <%= index %>
+  option_type_id: <%= OptionType.find_by_name('size').id %>
+  name: S
+  position: <%= index %>
+  presentation: Small
+  created_at: <%= Time.now %>
+  updated_at: <%= Time.now %>
+  <% index += 1 %>
+
+option_value_<%= index %>:
+  id: <%= index %>
+  option_type_id: <%= OptionType.find_by_name('size').id %>
+  name: M
+  position: <%= index %>
+  presentation: Medium
+  created_at: <%= Time.now %>
+  updated_at: <%= Time.now %>
+  <% index += 1 %>
+
+option_value_<%= index %>:
+  id: <%= index %>
+  option_type_id: <%= OptionType.find_by_name('size').id %>
+  name: L
+  position: <%= index %>
+  presentation: Large
+  created_at: <%= Time.now %>
+  updated_at: <%= Time.now %>
+  <% index += 1 %>
+
+option_value_<%= index %>:
+  id: <%= index %>
+  option_type_id: <%= OptionType.find_by_name('sex').id %>
+  name: b
+  position: <%= index %>
+  presentation: Boy
+  created_at: <%= Time.now %>
+  updated_at: <%= Time.now %>
+  <% index += 1 %>
+
+option_value_<%= index %>:
+  id: <%= index %>
+  option_type_id: <%= OptionType.find_by_name('sex').id %>
+  name: g
+  position: <%= index %>
+  presentation: Girl
+  created_at: <%= Time.now %>
+  updated_at: <%= Time.now %>
+  <% index += 1 %>

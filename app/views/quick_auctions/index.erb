@@ -18,7 +18,7 @@
         <% if price.sold %>
           <%= price.id %>
         <% else %>
-          <%= link_to price.price, checkout_price_path(:price_id => price.id), :class => 'price_change_link', :id => price.id %>
+          <%= link_to price.price, product_path(@product, :price_id => price.id), :class => 'price_change_link' %>
         <% end %>
       </td>
     <% end %>
