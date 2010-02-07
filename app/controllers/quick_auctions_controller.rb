@@ -22,6 +22,7 @@ class QuickAuctionsController < ApplicationController
   
   def checkout
     @variant = Variant.find(params[:id])
+    @product = @variant.product
   end
   
   # def update

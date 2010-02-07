@@ -1,0 +1,16 @@
+ul.list { list-style:none; width:380px;   border: 1px solid #929292; overflow:hidden; padding:0 0 10px 10px; margin:20px 0 0 0;} 
+ul.list li { float:left; margin:10px 10px 0 0; padding:3px; width:20px; .colborderall; text-align:center; height:20px;} 
+ul.list li.bought { background:url(../images/bought.png) 50% 50% no-repeat;   } 
+ul.list li a:hover { text-decoration:none;} 
+subscb { float:right; margin-right:10px;}
+
+red { color:#ff5f5f; }
+cost { color:#ff5f5f; font-size:3.2em; }
+form.buy { font-size:18px; font-weight:bold; }
+form.buy h1 { color:#ff5f5f; }
+form.buy p { margin-bottom:5px; }
+form.buy label { color:#ff5f5f; }
+form.buy .left { width:130px; float:left; }
+form.buy .buy_now { float:left; background:url(../images/button_buy_now.png) 0 0 no-repeat !important; clear:both; width:275px; height:82px; margin: 30px 0 0 22px; }
+form.buy .left label { display:block; width:70px; float:left; text-align:right; font-size:14px}
+form.buy .left div { clear:both; }

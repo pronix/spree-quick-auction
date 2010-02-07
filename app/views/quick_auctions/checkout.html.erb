@@ -1,4 +1,45 @@
 <script src="/javascripts/jquery_countdowntimer.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="/stylesheets/auction.css">
+
+<%= @product.name -%>
+<div id="product-images">
+  <div id="main-image">
+    <%= render 'image' -%>
+  </div>
+</div>
+
+<div id="product-description">
+  <% hook :product_description do %>
+    <%= product_description(@product) rescue t("product_has_no_description") %>
+  <% end %>
+</div>
+
+<% form_for :products, :url => orders_url, :html => { :class => "buy" } do |f| %>
+  <h1 class="red">Good work</h1>
+  <p>You got in for</p>
+  <p class="cost"><%= number_to_currency @variant.price %></p>
+  <p>Quick, you have <span class="red" id="defaultCountdown"></span> to byu it</p>
+
+  <%= f.hidden_field @variant.product.id, :value => @variant.id %>
+  <%= f.hidden_field :variant_id, :value => @variant.id %>
+  <% @variant.product.option_types.each do |option_type| %>
+    <div class="left">
+      <p class="red"><%= option_type.presentation %></p>
+      <% option_type.option_values.each do |option_value| %>
+        <div>
+          <label>
+            <%= option_value.presentation %>
+          </label>
+          <%= radio_button_tag option_type.name, option_value.id, :checked => true %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  <%= submit_tag '', :class => "buy_now" %>
+<% end %>
+    
+    
+
 <script type="text/javascript"> 
 $(function () {
 	$('#defaultCountdown').countdown({
@@ -8,23 +49,3 @@ $(function () {
     });
 });
 </script> 
-COST: <%= @variant.price.to_i %>
-TIME: <%= (@variant.product.available_off - Time.now).to_i %>
-<div id="defaultCountdown"></div> 
-
-
-
-<% form_for :products, :url => orders_url do |f| %>
-  <%= f.hidden_field @variant.product.id, :value => @variant.id %>
-  <%= f.hidden_field :variant_id, :value => @variant.id %>
-  <% @variant.product.option_types.each do |option_type| %>
-    <p><%= option_type.presentation %></p>
-  <% option_type.option_values.each do |option_value| %>
-    <p><%= option_value.presentation %></p>
-    <p><%= radio_button_tag option_type.name, option_value.id, :checked => true %></p>
-  <% end %>
-  <% end %>
-  <button type='submit' class='large primary'>
-    <%= image_tag('/images/add-to-cart.png') + t('add_to_cart') %>
-  </button>
-<% end %>

@@ -93,38 +93,19 @@ class QuickAuctionExtension < Spree::Extension
     
     Admin::ProductsController.class_eval do
       after_filter :change_prices, :only => :update
+      before_filter :fix_on_hand, :only => :update
       
+      def fix_on_hand
+        params[:product].delete(:on_hand) if !Product.find_by_name(params[:id]).variants.blank?
+      end
+      
+      # Set it before_filter, coz we have error hand_on
       def change_prices
-        @product.change_variants
+        @product.change_variants if @product.variants.blank?
       end
       
     end
-      
-    #   def change_time
-    #     params[:product][:available_off] = Time.parse(params[:product][:available_off]) - 5.hours
-    #     # product = Product.find_by_name(params[:product][:name])
-    #     # product.update_attributes(:available_off => params[:product][:available_off])
-    #     # Rails.logger.info [" [ zaebalo: ] ", product.try(:id)].join
-    #     # params[:product][:available_off] = Time.parse(params[:product][:available_off]).to_s(:db)
-    #     # params[:product][:available_on] = Time.parse(params[:product][:available_on]).to_s(:db)
-    #     # if params[:product]
-    #     #   params[:product][:available_off] = Time.parse(params[:product][:available_off]) if !params[:product][:available_off].blank?
-    #     # end
-    #      # Rails.logger.info [" [ Dwnload file: ] ", params[:product][:available_off]].join
-    #   end
-    # end
-    
-    # Admin::ProductsController.class_eval do
-    #   before_filter :add_parts_tab
-    #   def add_parts_tab
-    #     @product << { :name => "HELLLOO", :url => "" }
-    #   end
-    # end
 
-    # make your helper avaliable in all views
-    # Spree::BaseController.class_eval do
-    #   helper YourHelper
-    # end
   end
     
 end
