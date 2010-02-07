@@ -1,26 +1,28 @@
-<%= @product.name -%>
-<div id="product-images">
-  <div id="main-image">
-    <%= render 'image' -%>
+<% if @product %>
+  <%= @product.name -%>
+  <div id="product-images">
+    <div id="main-image">
+      <%= render 'image' -%>
+    </div>
   </div>
-</div>
-<div id="product-description">
-  <% hook :product_description do %>
-    <%= product_description(@product) rescue t("product_has_no_description") %>
-  <% end %>
-</div>
-
-<table border="1">
-  <tr>
-    <% @product.variants.each_with_index do |variant,index| %>
-      <%= '</tr><tr>' if index % 10 == 0 %>
-      <td>
-        <% if variant.in_stock? %>
-          <%= link_to variant.price.to_i, checkout_variant_path(variant) %>
-        <% else %>
-          huy
-        <% end %>
-      </td>
+  <div id="product-description">
+    <% hook :product_description do %>
+      <%= product_description(@product) rescue t("product_has_no_description") %>
     <% end %>
-  </tr>
-</table>
+  </div>
+
+  <table border="1">
+    <tr>
+      <% @product.variants.each_with_index do |variant,index| %>
+        <%= '</tr><tr>' if index % 10 == 0 %>
+        <td>
+          <% if variant.in_stock? %>
+            <%= link_to variant.price.to_i, checkout_variant_path(variant) %>
+          <% else %>
+            huy
+          <% end %>
+        </td>
+      <% end %>
+    </tr>
+  </table>
+<% end %>

@@ -25,7 +25,7 @@ class QuickAuctionExtension < Spree::Extension
           counts = self.count_on_hand
           counts.times.each do |price|
             variant = self.variants.create(:sku => self.sku + '_' + price.to_s,
-                                           :price => (price + 1) * self.step,
+                                           :price => self.price + (price + 1 - 1) * self.step,
                                            :count_on_hand => 1)
             self.option_types.each do |option_type|
               variant.option_values << option_type.option_values.last
