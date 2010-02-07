@@ -3,7 +3,7 @@ class QuickAuctionsController < ApplicationController
   def index
     @product = Product.find(:all, :conditions => ['available_on >= ?
                                                   AND available_off <= ? ',
-                                                 Time.now, Time.now]).last
+                                                 Time.zone.now, Time.zone.now]).last
   end
   
   def show
@@ -11,11 +11,11 @@ class QuickAuctionsController < ApplicationController
   end
  
   def create
-    price = Product.find(params[:product_id].to_i).prices.find(params[:price_id].to_i)
-    if price.sold
-      price.update_attributes(:sold => false)
+    variant = Product.find(params[:product_id].to_i).variants.find(params[:variant_id].to_i)
+    if variant.in_stock?
+      variant.update_attributes(:count_on_hand => 0)
     else
-      price.update_attributes(:sold => true)
+      variant.update_attributes(:count_on_hand => 1)
     end
     render :nothing => true
   end

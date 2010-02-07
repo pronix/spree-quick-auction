@@ -72,6 +72,21 @@
         </ul>
       <% end %>
 
+       <table border="1">
+         <tr>
+           <% @product.variants.each_with_index do |variant,index| %>
+             <%= '</tr><tr>' if index % 10 == 0 %>
+             <td>
+               <% if !variant.in_stock? %>
+                 <h1><%= link_to variant.price.to_i, '#', :class => 'price_change_link', :id => variant.id %></h1>
+               <% else %>
+                 <%= link_to variant.price.to_i, '#', :class => 'price_change_link', :id => variant.id %>
+               <% end %>
+             </td>
+           <% end %>
+          </tr>
+       </table>
+
       <p>
         <%= f.label :shipping_category_id, t("shipping_categories")%><br />
         <%= f.collection_select(:shipping_category_id, @shipping_categories, :id, :name, {:include_blank => true}, {"style" => "width:200px"}) %>
@@ -108,7 +123,7 @@
 
 <script type="text/javascript" charset="utf-8">
 $(".price_change_link").click(function() {
-    $.post("<%= change_price_path %>", { price_id: $(this).attr('id'), product_id: <%= @product.id %>  });
+    $.post("<%= change_price_path %>", { variant_id: $(this).attr('id'), product_id: <%= @product.id %>  });
 });
 $(function() {
   $('.pickerfield').datetime({
