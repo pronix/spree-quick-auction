@@ -1,4 +1,5 @@
 <%= stylesheet_link_tag 'auction' %>
+<%= javascript_include_tag 'jquery_cookie' %>
 
 <form class="subscb">
   <label>Subscribe</label>
@@ -6,7 +7,6 @@
 </form>
 
 <% if @product %>
-  <%= @product.name -%>
   <div id="product-images">
     <div id="main-image">
       <%= render 'image' -%>
@@ -20,7 +20,7 @@
   <ul class="list">
     <% @product.variants.each do |variant| %>
       <% if variant.in_stock? %>
-        <li><%= link_to variant.price.to_i, checkout_variant_path(variant) %></li>
+        <li><%= link_to variant.price.to_i, checkout_variant_path(:permalink => @product.permalink), :class => 'variant_link', :id => variant.id %></li>
       <% else %>
         <li class="bought"><%= variant.price.to_i %></li>
       <% end %>
@@ -28,3 +28,9 @@
   </ul>
 
 <% end %>
+
+<script type="text/javascript" charset="utf-8">
+$(".variant_link").click(function() {
+    $.cookie("selected_option", $(this).attr('id'));
+});
+</script>

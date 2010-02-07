@@ -39,7 +39,7 @@ class QuickAuctionExtension < Spree::Extension
       end
       
       named_scope :availables, :conditions => ['available_on <= ? AND available_off >= ?',
-                                             Time.zone.now, Time.zone.now]
+                                             Time.now, Time.now]
       
       
     end
@@ -96,7 +96,7 @@ class QuickAuctionExtension < Spree::Extension
       before_filter :fix_on_hand, :only => :update
       
       def fix_on_hand
-        params[:product].delete(:on_hand) if !Product.find_by_name(params[:id]).variants.blank?
+        params[:product].delete(:on_hand) if !Product.find_by_permalink(params[:id]).variants.blank?
       end
       
       # Set it before_filter, coz we have error hand_on

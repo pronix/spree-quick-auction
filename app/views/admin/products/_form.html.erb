@@ -71,19 +71,21 @@
             <%= f.text_field :depth, :size => 4 %>
           </li>
         </ul>
-      <% end %>
-
+      <% else %>
         <ul class="list">
           <% @product.variants.each do |variant| %>
-              <% if variant.in_stock? %>
-                <!-- count on hand = 0 -->
-                <li><div id="<%= variant.id %>" class="change_variant_stock"><%= variant.price.to_i %></div></li>
-              <% else %>
-                <!-- count on hand != 0 -->
-                <li class="bought"><div id="<%= variant.id %>" class="change_variant_stock"><%= variant.price.to_i %></div></li>
-              <% end %>
+            <% if variant.in_stock? %>
+              <!-- count on hand = 0 -->
+              <li><div id="<%= variant.id %>" class="change_variant_stock"><%= variant.price.to_i %></div></li>
+            <% else %>
+              <!-- count on hand != 0 -->
+              <li class="bought"><div id="<%= variant.id %>" class="change_variant_stock"><%= variant.price.to_i %></div></li>
+            <% end %>
           <% end %>
         </ul>
+      <% end %>
+
+
 
       <p>
         <%= f.label :shipping_category_id, t("shipping_categories")%><br />

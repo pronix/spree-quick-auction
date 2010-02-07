@@ -19,18 +19,18 @@ class QuickAuctionsController < ApplicationController
   end
   
   def checkout
-    @variant = Variant.find(params[:id])
+    begin
+      @variant = Product.find_by_permalink(params[:permalink]).variants.find(cookies[:selected_option])
+    rescue
+      flash[:notice] = "Sorry, but wrong product name"
+      redirect_to ('/') and return
+    end
+    if @variant.nil? || !@variant.in_stock?
+      flash[:notice] = "Sorry, but the lot has already been bought"
+      redirect_to ('/') and return
+    end
     @product = @variant.product
   end
   
-  # def update
-  #   price = Product.find(params[:id].to_i).prices.find(params[:price_id].to_i)
-  #   if price.sold
-  #     price.update_attributes(:sold => false)
-  #   else
-  #     price.update_attributes(:sold => true)
-  #   end
-  #   redirect_to :back
-  # end
 
 end
