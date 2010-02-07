@@ -12,13 +12,13 @@
 
 <table border="1">
   <tr>
-    <% @product.prices.each_with_index do |price,index| %>
+    <% @product.variants.each_with_index do |variant,index| %>
       <%= '</tr><tr>' if index % 10 == 0 %>
       <td>
-        <% if price.sold %>
-          <%= price.id %>
+        <% if variant.in_stock? %>
+          <%= link_to variant.price.to_i, checkout_variant_path(variant) %>
         <% else %>
-          <%= link_to price.price, product_path(@product, :price_id => price.id), :class => 'price_change_link' %>
+          huy
         <% end %>
       </td>
     <% end %>

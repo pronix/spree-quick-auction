@@ -2,12 +2,29 @@
 <script type="text/javascript"> 
 $(function () {
 	$('#defaultCountdown').countdown({
-      until: +<%= (@price.product.available_off - Time.now).to_i %>,
+      until: +<%= (@variant.product.available_off - Time.now).to_i %>,
       format: 'MS',
       layout: '{mn}:{sn}'
     });
 });
 </script> 
-COST: <%= @price.id %>
-TIME: <%= (@price.product.available_off - Time.now).to_i %>
+COST: <%= @variant.price.to_i %>
+TIME: <%= (@variant.product.available_off - Time.now).to_i %>
 <div id="defaultCountdown"></div> 
+
+
+
+<% form_for :products, :url => orders_url do |f| %>
+  <%= f.hidden_field @variant.product.id, :value => @variant.id %>
+  <%= f.hidden_field :variant_id, :value => @variant.id %>
+  <% @variant.product.option_types.each do |option_type| %>
+    <p><%= option_type.presentation %></p>
+  <% option_type.option_values.each do |option_value| %>
+    <p><%= option_value.presentation %></p>
+    <p><%= radio_button_tag option_type.name, option_value.id, :checked => true %></p>
+  <% end %>
+  <% end %>
+  <button type='submit' class='large primary'>
+    <%= image_tag('/images/add-to-cart.png') + t('add_to_cart') %>
+  </button>
+<% end %>

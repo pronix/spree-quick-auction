@@ -1,7 +1,11 @@
 class QuickAuctionsController < ApplicationController
   
   def index
-    @product = Product.find(1025786064)
+    @product = Product.last
+  end
+  
+  def show
+    @variant = Variant.find(params[:id])
   end
  
   def create
@@ -15,7 +19,7 @@ class QuickAuctionsController < ApplicationController
   end
   
   def checkout
-    @price = Price.find(params[:price_id])
+    @variant = Variant.find(params[:id])
   end
   
   # def update

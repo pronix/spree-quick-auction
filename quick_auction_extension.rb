@@ -54,6 +54,30 @@ class QuickAuctionExtension < Spree::Extension
       
     end
     
+    OrdersController.class_eval do
+      before_filter :fix_type_values, :only => :create
+      after_filter :fix_quantity, :only => :create
+      
+      def fix_type_values
+        variant = Variant.find(params[:products][:variant_id])
+        variant.option_values.clear
+        variant.product.option_types.map {|option| option.name}.each do |option_name|
+          if params.key?(option_name)
+            variant.option_values << OptionValue.find(params[option_name.to_sym])
+          end
+        end
+        params.merge!({:quantity => 1})
+      end
+      
+      def fix_quantity
+        order = Order.find_by_token(session[:order_token])
+        order.line_items.each do |line_item|
+          line_item.update_attributes(:quantity => 1)
+        end
+      end
+      
+    end
+    
     Admin::ProductsController.class_eval do
       after_filter :change_prices, :only => :update
       
