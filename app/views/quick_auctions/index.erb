@@ -21,13 +21,11 @@
 
   <ul class="list">
     <% @product.variants.each do |variant| %>
-      <li>
       <% if variant.in_stock? %>
-        <%= link_to variant.price.to_i, checkout_variant_path(variant) %>
+        <li><%= link_to variant.price.to_i, checkout_variant_path(variant) %></li>
       <% else %>
-        <%= variant.price.to_i %>
+        <li class="bought"><%= variant.price.to_i %></li>
       <% end %>
-      </li>
     <% end %>
   </ul>
 

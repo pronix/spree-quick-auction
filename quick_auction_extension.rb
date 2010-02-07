@@ -15,10 +15,6 @@ class QuickAuctionExtension < Spree::Extension
   def activate
     
     Product.class_eval do
-      # has_many :prices
-      # has_many :product_sizes
-      
-      # before_create :change_prices
       
       def change_variants
         if self.count_on_hand != 0
@@ -41,6 +37,10 @@ class QuickAuctionExtension < Spree::Extension
       def available_off=(orig_date)
         write_attribute(:available_off, orig_date)
       end
+      
+      named_scope :availables, :conditions => ['available_on <= ? AND available_off >= ?',
+                                             Time.zone.now, Time.zone.now]
+      
       
     end
     

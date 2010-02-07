@@ -1,9 +1,7 @@
 class QuickAuctionsController < ApplicationController
   
   def index
-    @product = Product.find(:all, :conditions => ['available_on >= ?
-                                                  AND available_off <= ? ',
-                                                 Time.zone.now, Time.zone.now]).last
+    @product = Product.availables.last
   end
   
   def show
