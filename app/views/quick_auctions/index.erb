@@ -22,7 +22,7 @@
       <% if variant.in_stock? %>
         <li><%= link_to variant.price.to_i, checkout_variant_path(:permalink => @product.permalink), :class => 'variant_link', :id => variant.id %></li>
       <% else %>
-        <li class="bought"><%= variant.price.to_i %></li>
+        <li class="bought"><%= link_to variant.price.to_i, checkout_variant_path(:permalink => @product.permalink), :class => 'variant_link', :id => variant.id, :onclick => 'return false' %></li>
       <% end %>
     <% end %>
   </ul>
