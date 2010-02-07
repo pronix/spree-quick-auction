@@ -1,5 +1,5 @@
 ul.list { list-style:none; width:380px;   border: 1px solid #929292; overflow:hidden; padding:0 0 10px 10px; margin:20px 0 0 0;} 
-ul.list li { float:left; margin:10px 10px 0 0; padding:3px; width:20px; .colborderall; text-align:center; height:20px;} 
+ul.list li { float:left; margin:10px 10px 0 0; padding:3px; width:20px; .colborderall; text-align:center; height:20px; border: 1px solid #929292;} 
 ul.list li.bought { background:url(../images/bought.png) 50% 50% no-repeat;   } 
 ul.list li a:hover { text-decoration:none;} 
 subscb { float:right; margin-right:10px;}

@@ -39,5 +39,9 @@ class QuickAuctionHooks < Spree::ThemeSupport::HookListener
   #     tab(:taxonomies)
   #   end
   #
+  
+  # def product_description(product)
+  #   product.description.gsub(/^(.*)$/, '<p>\1</p>')
+  # end
 
 end

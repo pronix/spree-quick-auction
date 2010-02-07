@@ -121,11 +121,14 @@
 
 <script type="text/javascript" charset="utf-8">
 $(".change_variant_stock").click(function() {
+    var hand_on_integer = parseInt($("#product_on_hand").val());
     $.post("<%= change_price_path %>", { variant_id: $(this).attr('id'), product_id: <%= @product.id %>  });
     if ($(this).parents("li:first").attr("class") == 'bought') {
       $(this).parents("li:first").removeClass();
+      $("#product_on_hand").attr("value", hand_on_integer + 1);
     } else {
       $(this).parents("li:first").addClass('bought');
+      $("#product_on_hand").attr("value", hand_on_integer - 1);
     };
 });
 

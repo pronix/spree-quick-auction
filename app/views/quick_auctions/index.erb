@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="/stylesheets/auction.css">
+<%= stylesheet_link_tag 'auction' %>
 
 <form class="subscb">
   <label>Subscribe</label>
@@ -14,9 +14,7 @@
   </div>
 
   <div id="product-description">
-    <% hook :product_description do %>
-      <%= product_description(@product) rescue t("product_has_no_description") %>
-    <% end %>
+    <%= @product.description.gsub(/^(.*)$/, '<p>\1</p>') rescue t("product_has_no_description") %>
   </div>
 
   <ul class="list">

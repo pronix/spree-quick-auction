@@ -1,5 +1,5 @@
+<%= stylesheet_link_tag 'auction' %>
 <script src="/javascripts/jquery_countdowntimer.js" type="text/javascript"></script>
-<link rel="stylesheet" type="text/css" href="/stylesheets/auction.css">
 
 <%= @product.name -%>
 <div id="product-images">
@@ -9,9 +9,7 @@
 </div>
 
 <div id="product-description">
-  <% hook :product_description do %>
-    <%= product_description(@product) rescue t("product_has_no_description") %>
-  <% end %>
+  <%= @product.description.gsub(/^(.*)$/, '<p>\1</p>') rescue t("product_has_no_description") %>
 </div>
 
 <% form_for :products, :url => orders_url, :html => { :class => "buy" } do |f| %>
