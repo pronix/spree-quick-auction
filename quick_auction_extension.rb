@@ -70,11 +70,14 @@ class QuickAuctionExtension < Spree::Extension
         params.merge!({:quantity => 1})
       end
       
+      # Dirty hack, but when add new variant to cart, quanity => 2
       def fix_quantity
         order = Order.find_by_token(session[:order_token])
         order.line_items.each do |line_item|
           line_item.update_attributes(:quantity => 1)
         end
+        # Update order total, need when we use this hack
+        order.update_totals!
       end
       
       def check_variants
