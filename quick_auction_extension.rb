@@ -57,6 +57,7 @@ class QuickAuctionExtension < Spree::Extension
     OrdersController.class_eval do
       before_filter :fix_type_values, :only => :create
       after_filter :fix_quantity, :only => :create
+      before_filter :check_variants, :only => :edit
       
       def fix_type_values
         variant = Variant.find(params[:products][:variant_id])
@@ -73,6 +74,15 @@ class QuickAuctionExtension < Spree::Extension
         order = Order.find_by_token(session[:order_token])
         order.line_items.each do |line_item|
           line_item.update_attributes(:quantity => 1)
+        end
+      end
+      
+      def check_variants
+        order = Order.find_by_token(session[:order_token])
+        order.line_items.each do |line_item|
+          unless line_item.variant.in_stock?
+            order.line_items.delete(line_item)
+          end
         end
       end
       
