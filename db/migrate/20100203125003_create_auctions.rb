@@ -3,6 +3,8 @@ class CreateAuctions < ActiveRecord::Migration
     add_column :products, :available_off, :datetime, :null => false, :default => Time.now + 1.day
     add_column :products, :step, :integer, :null => false, :default => 1
     remove_column :products, :count_on_hand
+    remove_column :products, :available_on
+    add_column :products, :available_on, :datetime, :null => false, :default => Time.now + 1.hour
     add_column :products, :count_on_hand, :integer, :null => false, :default => 0
     add_column :products, :sex, :boolean, :null => false, :default => true
   end

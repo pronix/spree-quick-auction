@@ -43,13 +43,13 @@
       <p>
         <%= f.label :available_on, t("available_on") %><br />
         <%= f.error_message_on :available_on %>
-        <%= f.text_field :available_on, :value => (@product.available_on ? @product.available_on.to_s(:db) : Time.now.strftime("%Y-%m-%d %H:%M:%S")), :class => 'pickerfield' %>
+        <%= f.text_field :available_on, :value => @product.available_on.to_formatted_s(:date_time24), :class => 'pickerfield' %>
       </p>
                                                           
       <p>
         <%= f.label :available_off, t("available_off", :default => 'Avaible off') %><br />
         <%= f.error_message_on :available_off %>
-        <%= f.text_field :available_off, :class => 'pickerfield' %>
+        <%= f.text_field :available_off, :value => @product.available_off.to_formatted_s(:date_time24), :class => 'pickerfield' %>
       </p>
 
       <p>
