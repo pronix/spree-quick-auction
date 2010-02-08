@@ -1,17 +1,8 @@
-# Uncomment this if you reference any of your controllers in activate
-# require_dependency 'application'
-
 class QuickAuctionExtension < Spree::Extension
   version "1.0"
-  description "Describe your extension here"
-  url "http://yourwebsite.com/quick_auction"
+  description "Quick Auction extension for spree"
+  url "http://github.com/pronix/spree-quick-auction"
 
-  # Please use quick_auction/config/routes.rb instead for extension routes.
-
-  # def self.require_gems(config)
-  #   config.gem "gemname-goes-here", :version => '1.2.3'
-  # end
-  
   def activate
     
     Product.class_eval do
