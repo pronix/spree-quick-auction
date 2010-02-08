@@ -21,24 +21,9 @@ class QuickAuctionExtension < Spree::Extension
         end
       end
       
-      # def available_on
-      #   Time.parse(read_attribute(:available_on).to_s)
-      # end
-      
-      # def available_on=(orig_date)
-      #   write_attribute(:available_on, orig_date)
-      # end
-      
-      # def available_off
-      #   read_attribute(:available_off)
-      # end
-      
-      # def available_off=(orig_date)
-      #   write_attribute(:available_off, orig_date)
-      # end
       
       named_scope :availables, :conditions => ['available_on <= ? AND available_off >= ?',
-                                               Time.now, Time.now]
+                                               Time.now.utc, Time.now.utc]
       
       def available?
         return true if self.available_on <= Time.now && self.available_off >= Time.zone.now
