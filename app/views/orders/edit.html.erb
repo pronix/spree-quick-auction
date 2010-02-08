@@ -18,7 +18,7 @@
     </div>
   </div>
   <% end -%>
-  <p><%=link_to t("continue_shopping"), products_path, :class => 'button continue' %></p>
+  <p><%=link_to t("continue_shopping"), root_path, :class => 'button continue' %></p>
   <% unless @order.line_items.empty? -%>
   <p id="clear_cart_link">
     <%= link_to t("empty_cart"), object_url, :method => :delete, :class => 'button empty'  %>

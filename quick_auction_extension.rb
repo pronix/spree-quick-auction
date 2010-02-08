@@ -70,7 +70,7 @@ class QuickAuctionExtension < Spree::Extension
       def check_variants
         order = Order.find_by_token(session[:order_token])
         order.line_items.each do |line_item|
-          unless line_item.variant.in_stock?
+          if !line_item.variant.in_stock? || !line_item.variant.product.available?
             order.line_items.delete(line_item)
           end
         end
