@@ -75,12 +75,10 @@ describe QuickAuctionsController do
         before :each do
           @product = mock_model(Product, :permalink => 'test-1-2-3-q')
           @variant = mock_model(Variant, :product_id => @product.id)
-          Product.should_receive(:find_by_permalink).with(@product.permalink).and_return(@product)
+          Product.stub(:find_by_permalink).and_return(@product)
           @product.stub(:variants).and_return([@variant])
-          Variant.stub(:find).and_return(@variant)
+          @variant.stub(:find).and_return(@variant)
           @variant.stub(:in_stock?).and_return(true)
-          @variant.stub(:product).and_return(@product)
-          @product.stub(:available?).and_return(true)
         end
         
         def do_action(permalink=@product.permalink)
@@ -88,8 +86,8 @@ describe QuickAuctionsController do
         end
         
         it "should be success" do
-          cookies[:selected_option] = @variant.id
           do_action
+          puts flash[:notice]
           response.should be_success
         end
         
