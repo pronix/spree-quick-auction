@@ -12,7 +12,7 @@ For load basic fixuters for t-shirt do this:
 Run spree:
 * ./script/server
 * Go to http://localhost:3000/admin/products 
-* Create a new product and fill all field.
+* Create a new product and fill all field. Must fill a prototype.
 * Then edit the product and fill 'Available On', 'Available Off', 'On hand',
   Step and click update.
   Available On - this is date, when product is start to see in http://localhost:3000/
