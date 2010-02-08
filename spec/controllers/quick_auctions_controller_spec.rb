@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe QuickAuctionsController do
-
+  
   describe 'Test routes' do
     
     describe 'Test / path and routes' do
@@ -50,8 +50,57 @@ describe QuickAuctionsController do
           response.should be_success
         end
         
+        it "should cookies be nil" do
+          do_action
+          cookies[:selected_option].should be_nil
+        end
+        
       end 
       
+      describe 'Check :controller => quick_auctions, :action => checkout. Wrong' do
+        def do_action(permalink='abcd')
+          get :checkout, :permalink => permalink
+        end
+        it "should be redirect" do
+          do_action
+          response.should be_redirect
+        end 
+        it "should be redirect to /" do
+          do_action
+          response.should redirect_to(root_path)
+        end 
+      end 
+      
+      describe 'Check :controller => quick_auctions, :action => checkout. Right' do
+        before :each do
+          @product = mock_model(Product, :permalink => 'test-1-2-3-q')
+          @variant = mock_model(Variant, :product_id => @product.id)
+          Product.should_receive(:find_by_permalink).with(@product.permalink).and_return(@product)
+          @product.stub(:variants).and_return([@variant])
+          Variant.stub(:find).and_return(@variant)
+          @variant.stub(:in_stock?).and_return(true)
+          @variant.stub(:product).and_return(@product)
+          @product.stub(:available?).and_return(true)
+        end
+        
+        def do_action(permalink=@product.permalink)
+          get :checkout, :permalink => permalink
+        end
+        
+        it "should be success" do
+          cookies[:selected_option] = @variant.id
+          do_action
+          response.should be_success
+        end
+        
+        # it "should be not redirected" do
+        #   do_action
+        #   response.should_not be_redirect
+        # end 
+        
+      end 
+    
+    
     end 
 
     

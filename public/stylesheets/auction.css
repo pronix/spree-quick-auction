@@ -18,5 +18,11 @@ form.buy .left div { clear:both; }
 variant_not_sold { font-size:6.7em; }
 variant_sold { font-size:1.7em; }
 
-#product-images { border:1px solid #939393; display: inline-block; float: left; width: 480px; margin:57px 10px 0 40px; padding:10px; }
+#product-images { border:1px solid #939393; display: inline-block;  float: left;  width: 480px;  margin:57px 10px 0 40px; padding:10px; }
 #product-description { border:1px solid #929292; display:inline-block; float:right; margin-right:10px; margin-top:35px; padding:40px 20px; width:210px; }
+
+.product-images { margin-top:40px !important; border:none !important; }
+.product-description{ float:left !important; margin:57px 10px 0 40px !important; padding:10px !important; width: 480px !important; clear:left; }
+
+.edit_product ul.list { margin:0 0 1em 0;}
+
