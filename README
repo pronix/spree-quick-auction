@@ -7,6 +7,8 @@ Step to install:
 For load basic fixuters for t-shirt do this:
 * rake spree:extensions:quick_auction:load_test_data
 
+
+
 Run spree:
 * ./script/server
 * Go to http://localhost:3000/admin/products 
@@ -22,6 +24,7 @@ Run spree:
 * Now we can go to the main page(http://localhost:3000/) and see this product.
 
 Notes:
+* config.time_zone must be with this rake time:zones:local values
 * If afministrator want to reset on_hand values, he must destroy all variants on product.
 * If product have a variants, administrator can see a table with prices, he can check and
   uncheck some price(simply clicking to price)

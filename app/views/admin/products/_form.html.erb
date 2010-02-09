@@ -36,7 +36,7 @@
     <% hook :admin_product_form_right, locals do %>
       <% f.field_container :price do %>
         <%= f.label :price, t("master_price")%> <span class="required">*</span><br />
-        <%= f.text_field :price, :value => number_with_precision(@product.price, 2)  %>
+        <%= f.text_field :price, :value => number_with_precision(@product.price, 2), :readonly => (true if !@product.variants.blank?) %>
         <%= f.error_message_on :price %>
       <% end %>
 
