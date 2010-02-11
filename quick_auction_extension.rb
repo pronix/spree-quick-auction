@@ -39,6 +39,13 @@ class QuickAuctionExtension < Spree::Extension
     
     ProductsController.class_eval do
       before_filter :find_price, :only => :show
+      before_filter :redirect_to_main, :only => :index
+      
+      # Basically redirect to / if user respone to /products
+      # I think it's more nice, that dirty routes, but it still very stupid
+      def redirect_to_main
+        redirect_to root_path
+      end
       
       def find_price
         @price = Price.find(params[:price_id])
