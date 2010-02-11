@@ -43,8 +43,33 @@ class QuickAuctionExtension < Spree::Extension
     
     OrdersController.class_eval do
       before_filter :fix_type_values, :only => :create
-      after_filter :fix_quantity, :only => :create
       before_filter :check_variants, :only => :edit
+      before_filter :remember_variant_options, :only => :create
+      # after_filter :fix_quantity, :only => :create
+      
+      # This staff save variants choice in session and don't change
+      # a variant
+      def remember_variant_options
+        # some precautions if params[:products] is ''
+        return if params[:products].blank?
+        # If it's a new session we simple add varinat to it
+        if session[:products].blank?
+          session[:products] = [ { :variant_id => params[:products][:variant_id],
+                                   :sex => params[:sex],
+                                   :size => params[:size] } 
+                               ]
+        else
+          # Check, if session have this variant, but other options
+          session[:products].each_with_index do |variant, index|
+            session[:products].delete_at(index) if params[:products][:variant_id] == variant[:variant_id]
+          end
+          session[:products] << { :variant_id => params[:products][:variant_id],
+            :sex => params[:sex],
+            :size => params[:size]
+          }
+        end
+      end
+            
       
       def fix_type_values
         variant = Variant.find(params[:products][:variant_id])
@@ -58,14 +83,14 @@ class QuickAuctionExtension < Spree::Extension
       end
       
       # Dirty hack, but when add new variant to cart, quanity => 2
-      def fix_quantity
-        order = Order.find_by_token(session[:order_token])
-        order.line_items.each do |line_item|
-          line_item.update_attributes(:quantity => 1)
-        end
-        # Update order total, need when we use this hack
-        order.update_totals!
-      end
+      # def fix_quantity
+      #   order = Order.find_by_token(session[:order_token])
+      #   order.line_items.each do |line_item|
+      #     line_item.update_attributes(:quantity => 1)
+      #   end
+      #   # Update order total, need when we use this hack
+      #   order.update_totals!
+      # end
       
       def check_variants
         order = Order.find_by_token(session[:order_token])
@@ -91,6 +116,18 @@ class QuickAuctionExtension < Spree::Extension
         @product.change_variants if @product.variants.blank?
       end
       
+    end
+    
+    Spree::BaseHelper.class_eval do
+      def variant_options_session(variant, user_session = [])
+        # debugger
+        user_session.map do |x|
+          # debugger
+          if x[:variant_id].to_i == variant.id
+            return "<span class =\"out-of-stock\">(" + t("out_of_stock") + ") Size: #{OptionValue.find(x[:size].to_i).presentation}, Sex: #{OptionValue.find(x[:sex].to_i).presentation} </span><br />"
+          end
+        end
+      end
     end
 
   end
