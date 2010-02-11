@@ -1,13 +1,15 @@
 This is quick auction module for spree(tested on spree-0.9.4)
 
+System Requirements:
+* ruby >= 1.8.7
+* spree >= 0.9.4
+
 Step to install:
 * script/extension install git@github.com:pronix/spree-quick-auction.git
 * rake db:migrate
 
 For load basic fixuters for t-shirt do this:
 * rake spree:extensions:quick_auction:load_test_data
-
-
 
 Run spree:
 * ./script/server
