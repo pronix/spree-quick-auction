@@ -4,34 +4,33 @@
     <% hook :cart_item_image, locals do %>
       <%= item_form.hidden_field :variant_id %>
       <%= item_form.hidden_field :order_id %>
-      <% if variant.images.length == 0 %>
+      <%- if variant.images.length == 0 -%>
         <%= small_image(variant.product) %>
-      <% else %>
+      <%- else -%>
         <%=  image_tag variant.images.first.attachment.url(:small)   %>
-      <% end %>
-    <% end %>
+      <%- end -%>
+    <%- end -%>
   </td>
   <td>
-    <% hook :cart_item_description, locals do %>
+    <%- hook :cart_item_description, locals do -%>
       <h4><%= link_to variant.product.name,  product_path(variant.product) %></h4>
         <%= variant_options_session(variant, session[:products]) %>
-      <%# variant_options variant %>
       <%= truncate(variant.product.description, :length => 100, :omission => "...") %>
-    <% end %>
+    <%- end -%>
   </td>
   <td>
-    <% hook :cart_item_price, locals do %>
+    <%- hook :cart_item_price, locals do -%>
       <%=  product_price(line_item) %>
-    <% end %>
+    <%- end -%>
   </td>
   <td>
-    <% hook :cart_item_quantity, locals do %>
+    <%- hook :cart_item_quantity, locals do -%>
       <%= item_form.text_field :quantity, :size => 3, :readonly => true %>
-    <% end %>
+    <%- end -%>
   </td>
   <td>
-    <% hook :cart_item_total, locals do %>
+    <%- hook :cart_item_total, locals do -%>
       <%= format_price(product_price(line_item, :format_as_currency => false) * line_item.quantity) unless line_item.quantity.nil? %>
-    <% end %>
+    <%- end -%>
   </td>
 </tr>

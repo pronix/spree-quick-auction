@@ -26,7 +26,7 @@ class QuickAuctionExtension < Spree::Extension
                                                Time.now.utc, Time.now.utc]
       
       def available?
-        return true if self.available_on <= Time.now && self.available_off >= Time.zone.now
+        return true if self.available_on <= Time.now && self.available_off >= Time.now
       end
       
     end
@@ -45,7 +45,6 @@ class QuickAuctionExtension < Spree::Extension
       before_filter :fix_type_values, :only => :create
       before_filter :check_variants, :only => :edit
       before_filter :remember_variant_options, :only => :create
-      # after_filter :fix_quantity, :only => :create
       
       # This staff save variants choice in session and don't change
       # a variant
@@ -81,16 +80,6 @@ class QuickAuctionExtension < Spree::Extension
         end
         params.merge!({:quantity => 1})
       end
-      
-      # Dirty hack, but when add new variant to cart, quanity => 2
-      # def fix_quantity
-      #   order = Order.find_by_token(session[:order_token])
-      #   order.line_items.each do |line_item|
-      #     line_item.update_attributes(:quantity => 1)
-      #   end
-      #   # Update order total, need when we use this hack
-      #   order.update_totals!
-      # end
       
       def check_variants
         order = Order.find_by_token(session[:order_token])
