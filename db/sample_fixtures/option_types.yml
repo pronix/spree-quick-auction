@@ -1,6 +1,5 @@
 <% index = 1 %>
 option_type_<%= index %>:
-  id: <%= index %>
   name: size
   presentation: Size
   created_at: <%= Time.now %>
@@ -8,7 +7,6 @@ option_type_<%= index %>:
   <% index += 1 %>
 
 option_type_<%= index %>:
-  id: <%= index %>
   name: sex
   presentation: Sex
   created_at: <%= Time.now %>

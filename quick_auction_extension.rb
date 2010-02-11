@@ -23,10 +23,16 @@ class QuickAuctionExtension < Spree::Extension
       
       
       named_scope :availables, :conditions => ['available_on <= ? AND available_off >= ?',
-                                               Time.now.utc, Time.now.utc]
+                                               Time.now.utc, Time.now.utc], :order => 'created_at DESC'
       
       def available?
         return true if self.available_on <= Time.now && self.available_off >= Time.now
+      end
+      
+      class << self
+        def available_last
+          self.availables.map {|x| x if x.has_variants?}.compact.try(:first)
+        end
       end
       
     end

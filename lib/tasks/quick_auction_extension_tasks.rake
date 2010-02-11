@@ -20,7 +20,7 @@ namespace :spree do
         Prototype.destroy_all
         fixtures = %w{ option_types.yml option_values.yml prototypes.yml }
         fixtures.each do |fixture_file|
-            Fixtures.create_fixtures("#{QuickAuctionExtension.root}/db/sample",
+            Fixtures.create_fixtures("#{QuickAuctionExtension.root}/db/sample_fixtures",
                                      File.basename(fixture_file, '.*'))
         end
         Prototype.find_by_name('Shirt').option_types << OptionType.find_by_name('size')

@@ -1,7 +1,7 @@
 class QuickAuctionsController < ApplicationController
   
   def index
-    @product = Product.availables.last
+    @product = Product.available_last
   end
   
   def show
