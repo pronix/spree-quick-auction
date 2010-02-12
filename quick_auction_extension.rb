@@ -4,9 +4,19 @@ class QuickAuctionExtension < Spree::Extension
   url "http://github.com/pronix/spree-quick-auction"
 
   def activate
-    
-    Product.class_eval do
+    LineItem.class_eval do
+      before_update :fix_quantity
       
+      # Some hack. Becouse I don't know the reason why :quantity set to +1
+      # if :quantity is not 0
+      # TODO: try to kosher way to don't do this
+      def fix_quantity
+        self.quantity = 1
+      end
+      
+    end
+        
+    Product.class_eval do
       def change_variants
         if self.count_on_hand != 0
           counts = self.count_on_hand
@@ -20,7 +30,6 @@ class QuickAuctionExtension < Spree::Extension
           end
         end
       end
-      
       
       named_scope :availables, :conditions => ['available_on <= ? AND available_off >= ?',
                                                Time.now.utc, Time.now.utc], :order => 'created_at DESC'
@@ -59,7 +68,7 @@ class QuickAuctionExtension < Spree::Extension
       before_filter :check_variants, :only => :edit
       before_filter :remember_variant_options, :only => :create
       
-      # This staff save variants choice in session and don't change
+      # This staff save variants choices in session and don't change
       # a variant
       def remember_variant_options
         # some precautions if params[:products] is ''
@@ -84,14 +93,15 @@ class QuickAuctionExtension < Spree::Extension
             
       
       def fix_type_values
-        variant = Variant.find(params[:products][:variant_id])
-        variant.option_values.clear
-        variant.product.option_types.map {|option| option.name}.each do |option_name|
-          if params.key?(option_name)
-            variant.option_values << OptionValue.find(params[option_name.to_sym])
-          end
-        end
-        params.merge!({:quantity => 1})
+        # variant = Variant.find(params[:products][:variant_id])
+        # variant.option_values.clear
+        # variant.product.option_types.map {|option| option.name}.each do |option_name|
+        #   if params.key?(option_name)
+        #     variant.option_values << OptionValue.find(params[option_name.to_sym])
+        #   end
+        # end
+        # debugger
+        params.merge!({:quantity => "1"})
       end
       
       def check_variants
@@ -122,9 +132,7 @@ class QuickAuctionExtension < Spree::Extension
     
     Spree::BaseHelper.class_eval do
       def variant_options_session(variant, user_session = [])
-        # debugger
         user_session.map do |x|
-          # debugger
           if x[:variant_id].to_i == variant.id
             return "<span class =\"out-of-stock\">(" + t("out_of_stock") + ") Size: #{OptionValue.find(x[:size].to_i).presentation}, Sex: #{OptionValue.find(x[:sex].to_i).presentation} </span><br />"
           end
