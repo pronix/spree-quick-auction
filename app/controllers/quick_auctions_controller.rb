@@ -19,6 +19,7 @@ class QuickAuctionsController < ApplicationController
   end
   
   def checkout
+    Order.find(session[:order_id]).destroy rescue '' if session[:order_id]
     begin
       @variant = Product.find_by_permalink(params[:permalink]).variants.find(cookies[:selected_option])
       if @variant.nil? || !@variant.in_stock? || !@variant.product.available?

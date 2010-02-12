@@ -5,14 +5,6 @@ class QuickAuctionExtension < Spree::Extension
 
   def activate
     
-    # ApplicationController.class_eval do
-    #   before_filter :change_current_action
-      
-    #   def change_current_action
-    #     @current_action = 'thank_you'
-    #   end
-    # end
-    
     LineItem.class_eval do
       before_update :fix_quantity
       
@@ -55,8 +47,11 @@ class QuickAuctionExtension < Spree::Extension
       
     end
     
+    CheckoutsController.class_eval do
+      edit.before { @order.update_totals! }
+    end
+    
     ProductsController.class_eval do
-      before_filter :find_price, :only => :show
       before_filter :redirect_to_main, :only => :index
       
       # Basically redirect to / if user respone to /products
@@ -65,23 +60,18 @@ class QuickAuctionExtension < Spree::Extension
         redirect_to root_path
       end
       
-      def find_price
-        @price = Price.find(params[:price_id])
-        redirect_to root_path if @price.sold
-      end
-      
     end
     
     OrdersController.class_eval do
-      before_filter :fix_type_values, :only => :create
-      before_filter :check_variants, :only => :edit
-      before_filter :remember_variant_options, :only => :create
+      before_filter :fix_type_values, :only => [:create]
+      before_filter :remember_variant_options, :only => [:create]
       
       # When user click to Buy Now we redirect he to checkout edit page
       create do
-        flash nil 
-		success.wants.html {redirect_to order_checkout_path(@order)}
-		failure.wants.html {redirect_to root_path}
+        flash nil
+	    # success.wants.html {redirect_to edit_order_url(@order)}
+        success.wants.html {redirect_to edit_order_checkout_path(@order)}
+        failure.wants.html {redirect_to edit_order_checkout_path(@order)}
       end
       
       # This staff save variants choices in session and don't change
@@ -107,26 +97,9 @@ class QuickAuctionExtension < Spree::Extension
         end
       end
             
-      
+      # Fix quanity, I don't know why, but its step to 2
       def fix_type_values
-        # variant = Variant.find(params[:products][:variant_id])
-        # variant.option_values.clear
-        # variant.product.option_types.map {|option| option.name}.each do |option_name|
-        #   if params.key?(option_name)
-        #     variant.option_values << OptionValue.find(params[option_name.to_sym])
-        #   end
-        # end
-        # debugger
         params.merge!({:quantity => "1"})
-      end
-      
-      def check_variants
-        order = Order.find_by_token(session[:order_token])
-        order.line_items.each do |line_item|
-          if !line_item.variant.in_stock? || !line_item.variant.product.available?
-            order.line_items.delete(line_item)
-          end
-        end
       end
       
     end
