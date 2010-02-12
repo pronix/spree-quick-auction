@@ -4,6 +4,15 @@ class QuickAuctionExtension < Spree::Extension
   url "http://github.com/pronix/spree-quick-auction"
 
   def activate
+    
+    # ApplicationController.class_eval do
+    #   before_filter :change_current_action
+      
+    #   def change_current_action
+    #     @current_action = 'thank_you'
+    #   end
+    # end
+    
     LineItem.class_eval do
       before_update :fix_quantity
       
@@ -67,6 +76,13 @@ class QuickAuctionExtension < Spree::Extension
       before_filter :fix_type_values, :only => :create
       before_filter :check_variants, :only => :edit
       before_filter :remember_variant_options, :only => :create
+      
+      # When user click to Buy Now we redirect he to checkout edit page
+      create do
+        flash nil 
+		success.wants.html {redirect_to order_checkout_path(@order)}
+		failure.wants.html {redirect_to root_path}
+      end
       
       # This staff save variants choices in session and don't change
       # a variant
