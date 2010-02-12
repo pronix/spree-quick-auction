@@ -134,7 +134,7 @@ class QuickAuctionExtension < Spree::Extension
       def variant_options_session(variant, user_session = [])
         user_session.map do |x|
           if x[:variant_id].to_i == variant.id
-            return "<span class =\"out-of-stock\">(" + t("out_of_stock") + ") Size: #{OptionValue.find(x[:size].to_i).presentation}, Sex: #{OptionValue.find(x[:sex].to_i).presentation} </span><br />"
+            return "Size: #{OptionValue.find(x[:size].to_i).presentation}, Sex: #{OptionValue.find(x[:sex].to_i).presentation}<br />"
           end
         end
       end
