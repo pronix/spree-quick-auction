@@ -23,7 +23,8 @@
           <label>
             <%= option_value.presentation %>
           </label>
-          <%= radio_button_tag option_type.name, option_value.id, :checked => true %>
+          <%= radio_button_tag option_type.name, option_value.id, check_variants(option_type, option_value) %>
+
         </div>
       <% end %>
     </div>

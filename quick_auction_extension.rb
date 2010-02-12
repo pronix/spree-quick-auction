@@ -79,22 +79,11 @@ class QuickAuctionExtension < Spree::Extension
       def remember_variant_options
         # some precautions if params[:products] is ''
         return if params[:products].blank?
-        # If it's a new session we simple add varinat to it
-        if session[:products].blank?
-          session[:products] = [ { :variant_id => params[:products][:variant_id],
-                                   :sex => params[:sex],
-                                   :size => params[:size] } 
-                               ]
-        else
-          # Check, if session have this variant, but other options
-          session[:products].each_with_index do |variant, index|
-            session[:products].delete_at(index) if params[:products][:variant_id] == variant[:variant_id]
-          end
-          session[:products] << { :variant_id => params[:products][:variant_id],
-            :sex => params[:sex],
-            :size => params[:size]
-          }
-        end
+        # Save only one choice in session
+        session[:products] = [ { :variant_id => params[:products][:variant_id],
+                                 :sex => params[:sex],
+                                 :size => params[:size] } 
+                             ]
       end
             
       # Fix quanity, I don't know why, but its step to 2
