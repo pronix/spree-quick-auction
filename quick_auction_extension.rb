@@ -78,11 +78,22 @@ class QuickAuctionExtension < Spree::Extension
       # a variant
       def remember_variant_options
         # some precautions if params[:products] is ''
-        return if params[:products].blank?
+        # TODO fix latter
+        debugger
+        if params[:products].blank?
+          return
+        else
+          Variant.find(params[:products][:variant_id].to_i).product.option_types.each do |ot|
+            unless params.include?(ot.name.to_sym)
+              flash[:notice] = "Sorry, but u must choice product options"
+              redirect_to :back and return   
+            end
+          end
+        end
         # Save only one choice in session
-        session[:products] = [ { :variant_id => params[:products][:variant_id],
-                                 :sex => params[:sex],
-                                 :size => params[:size] } 
+        session[:products] = [ { :variant_id => params[:products][:variant_id].to_i,
+                                 :sex => params[:sex].to_i,
+                                 :size => params[:size].to_i } 
                              ]
       end
             
@@ -104,6 +115,33 @@ class QuickAuctionExtension < Spree::Extension
       # Set it before_filter, coz we have error hand_on
       def change_prices
         @product.change_variants if @product.variants.blank?
+      end
+      
+    end
+    
+    CheckoutsController.class_eval do
+      before_filter :change_product_options, :only => :update
+      
+      private
+      
+      def change_product_options
+        return unless params[:step] == "payment"
+        begin
+          debugger
+          session[:products].each do |variant|
+            variant = Variant.find(variant[:variant_id].to_i)
+            variant.option_values.clear
+          end
+          # Order.find_by_number(params[:order_id]).line_items.map do |line_item|
+          #   debugger
+          #   variant = line_item.variant
+          #   variant.option_values.clear
+          #   variant.product.option_types.map {|option| option.name}.each do |option_name|
+          #     debugger
+          #     variant.option_values << OptionValue.find(session[:products][option_name.to_sym])
+          #   end
+          # end
+        end
       end
       
     end
