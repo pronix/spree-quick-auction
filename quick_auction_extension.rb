@@ -128,9 +128,7 @@ class QuickAuctionExtension < Spree::Extension
             variant = Variant.find(variant[:variant_id].to_i)
             variant.option_values.clear
             variant.product.option_types.map {|option| option.name}.each do |option_name|
-              debugger
               session[:products].each do |product|
-                debugger
                 variant.option_values << OptionValue.find(product[option_name.to_sym])
               end
             end
@@ -141,10 +139,11 @@ class QuickAuctionExtension < Spree::Extension
     end
     
     Spree::BaseHelper.class_eval do
-      def variant_options_session(variant, user_session = [])
-        user_session.map do |x|
+      def variant_options_session(variant)
+        return '' unless session.include?(:products)
+        session[:products].each do |x|
           if x[:variant_id].to_i == variant.id
-            return "Size: #{OptionValue.find(x[:size].to_i).presentation}, Sex: #{OptionValue.find(x[:sex].to_i).presentation}<br />"
+            return "Size: #{OptionValue.find(x[:size]).presentation}, Sex: #{OptionValue.find(x[:sex]).presentation}<br />"
           end
         end
       end
