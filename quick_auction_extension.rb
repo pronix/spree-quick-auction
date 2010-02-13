@@ -117,6 +117,7 @@ class QuickAuctionExtension < Spree::Extension
     end
     
     CheckoutsController.class_eval do
+      prepend_before_filter :check_variant
       before_filter :change_product_options, :only => :update
       
       private
@@ -133,6 +134,15 @@ class QuickAuctionExtension < Spree::Extension
               end
             end
           end
+        end
+      end
+      
+      def check_variant
+        variant = Variant.find(session[:products].first[:variant_id])
+        debugger
+        unless variant.in_stock? && variant.available?
+          flash[:notice] = 'Sorry but the product has been sold or not available'
+          redirect_to root_path and return
         end
       end
       
