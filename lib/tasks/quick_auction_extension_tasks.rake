@@ -12,6 +12,10 @@ namespace :spree do
           cp file, RAILS_ROOT + path
         end
       end
+      desc "Disable SSL in production envirement"
+      task :disable_ssl => :environment do
+        Spree::Config.set(:allow_ssl_in_production => false)
+      end
       desc "Load sample date."
       task :load_test_data => :environment do
         ActiveRecord::Base.establish_connection(RAILS_ENV.to_sym)
