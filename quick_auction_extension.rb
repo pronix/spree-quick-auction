@@ -19,11 +19,11 @@ class QuickAuctionExtension < Spree::Extension
         
     Product.class_eval do
       def change_variants
-        if self.count_on_hand != 0
+        if !self.count_on_hand.nil? && self.count_on_hand != 0
           counts = self.count_on_hand
           counts.times.each do |price|
-            variant = self.variants.create(:sku => self.sku + '_' + price.to_s,
-                                           :price => self.price + (price + 1 - 1) * self.step,
+            variant = self.variants.create(:sku => self.sku + '-' + price.to_s,
+                                           :price => self.price + (price.to_i + 1 - 1) * self.step,
                                            :count_on_hand => 1)
             self.option_types.each do |option_type|
               variant.option_values << option_type.option_values.last
@@ -116,6 +116,22 @@ class QuickAuctionExtension < Spree::Extension
           end
         end
       end
+      
+      def show_available_times(product)
+        return_time = { }
+        if product.available_on.nil?
+          return_time.merge!({ :available_on => Time.now.to_formatted_s(:date_time24)})
+        else
+          return_time.merge!({ :available_on => product.available_on.to_formatted_s(:date_time24)})
+        end
+        if product.available_off.nil?
+          return_time.merge!({ :available_off => (Time.now + 4.hour).to_formatted_s(:date_time24)})
+        else
+          return_time.merge!({ :available_off => product.available_off.to_formatted_s(:date_time24)})
+        end
+        return_time
+      end
+      
     end
 
   end

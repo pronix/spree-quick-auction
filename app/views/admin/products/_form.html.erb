@@ -20,10 +20,8 @@
         <ul class="list">
           <% @product.variants.each do |variant| %>
             <% if variant.in_stock? %>
-              <!-- count on hand = 0 -->
               <li><div id="<%= variant.id %>" class="change_variant_stock"><%= variant.price.to_i %></div></li>
             <% else %>
-              <!-- count on hand != 0 -->
               <li class="bought"><div id="<%= variant.id %>" class="change_variant_stock"><%= variant.price.to_i %></div></li>
             <% end %>
           <% end %>
@@ -43,13 +41,13 @@
       <p>
         <%= f.label :available_on, t("available_on") %><br />
         <%= f.error_message_on :available_on %>
-        <%= f.text_field :available_on, :value => @product.available_on.to_formatted_s(:date_time24), :class => 'pickerfield' %>
+        <%= f.text_field :available_on, :value => show_available_times(@product)[:available_on], :class => 'pickerfield' %>
       </p>
                                                           
       <p>
         <%= f.label :available_off, t("available_off", :default => 'Avaible off') %><br />
         <%= f.error_message_on :available_off %>
-        <%= f.text_field :available_off, :value => @product.available_off.to_formatted_s(:date_time24), :class => 'pickerfield' %>
+        <%= f.text_field :available_off, :value => show_available_times(@product)[:available_off], :class => 'pickerfield' %>
       </p>
 
       <p>
