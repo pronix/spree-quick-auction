@@ -77,9 +77,6 @@ class QuickAuctionExtension < Spree::Extension
       # This staff save variants choices in session and don't change
       # a variant
       def remember_variant_options
-        # some precautions if params[:products] is ''
-        # TODO fix latter
-        debugger
         if params[:products].blank?
           return
         else
@@ -127,20 +124,17 @@ class QuickAuctionExtension < Spree::Extension
       def change_product_options
         return unless params[:step] == "payment"
         begin
-          debugger
           session[:products].each do |variant|
             variant = Variant.find(variant[:variant_id].to_i)
             variant.option_values.clear
+            variant.product.option_types.map {|option| option.name}.each do |option_name|
+              debugger
+              session[:products].each do |product|
+                debugger
+                variant.option_values << OptionValue.find(product[option_name.to_sym])
+              end
+            end
           end
-          # Order.find_by_number(params[:order_id]).line_items.map do |line_item|
-          #   debugger
-          #   variant = line_item.variant
-          #   variant.option_values.clear
-          #   variant.product.option_types.map {|option| option.name}.each do |option_name|
-          #     debugger
-          #     variant.option_values << OptionValue.find(session[:products][option_name.to_sym])
-          #   end
-          # end
         end
       end
       
