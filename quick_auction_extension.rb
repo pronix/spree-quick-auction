@@ -33,7 +33,7 @@ class QuickAuctionExtension < Spree::Extension
       end
       
       named_scope :availables, :conditions => ['available_on <= ? AND available_off >= ?',
-                                               Time.now.utc, Time.now.utc], :order => 'created_at DESC'
+                                               Time.now.utc.to_s(:db), Time.now.utc.to_s(:db)], :order => 'created_at DESC'
       
       def available?
         return true if self.available_on <= Time.now && self.available_off >= Time.now
