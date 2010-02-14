@@ -11,6 +11,9 @@ Step to install:
 For load basic fixuters for t-shirt do this:
 * rake spree:extensions:quick_auction:load_test_data
 
+For disable SSL on production mode:
+* rake spree:extensions:quick_auction:disable_ssl
+
 Run spree:
 * ./script/server
 * Go to http://localhost:3000/admin/products 
