@@ -47,6 +47,18 @@ class QuickAuctionExtension < Spree::Extension
       
     end
     
+    # ApplicationController.class_eval do
+    #   helper_method :session_variant
+      
+    #   def session_variant
+    #     begin
+    #       Variant.find(session[:products][:variant_id])
+    #     rescue 
+    #       nil
+    #     end
+    #   end
+    # end
+    
     CheckoutsController.class_eval do
       edit.before { @order.update_totals! }
     end
@@ -77,9 +89,11 @@ class QuickAuctionExtension < Spree::Extension
       # This staff save variants choices in session and don't change
       # a variant
       def remember_variant_options
+        # Simple precaution
         if params[:products].blank?
           return
         else
+          # All product types are necessary
           Variant.find(params[:products][:variant_id].to_i).product.option_types.each do |ot|
             unless params.include?(ot.name.to_sym)
               flash[:notice] = "Sorry, but u must choice product options"
@@ -87,11 +101,11 @@ class QuickAuctionExtension < Spree::Extension
             end
           end
         end
-        # Save only one choice in session
-        session[:products] = [ { :variant_id => params[:products][:variant_id].to_i,
-                                 :sex => params[:sex].to_i,
-                                 :size => params[:size].to_i } 
-                             ]
+        # Save only one choice in session.
+        session[:products] = { :variant_id => params[:products][:variant_id].to_i }
+        Variant.find(params[:products][:variant_id].to_i).product.option_types.each do |ot|
+          session[:products].merge!({ ot.name.to_sym => params[ot.name.to_sym].to_i })
+        end
       end
             
       # Fix quanity, I don't know why, but its step to 2
@@ -119,6 +133,7 @@ class QuickAuctionExtension < Spree::Extension
     end
     
     CheckoutsController.class_eval do
+      helper QuickAuctionsHelper
       prepend_before_filter :check_variant
       before_filter :change_product_options, :only => :update
       
@@ -127,20 +142,31 @@ class QuickAuctionExtension < Spree::Extension
       def change_product_options
         return unless params[:step] == "payment"
         begin
-          session[:products].each do |variant|
-            variant = Variant.find(variant[:variant_id].to_i)
-            variant.option_values.clear
-            variant.product.option_types.map {|option| option.name}.each do |option_name|
-              session[:products].each do |product|
-                variant.option_values << OptionValue.find(product[option_name.to_sym])
-              end
-            end
+          variant = Variant.find(session[:products][:variant_id])
+          variant.option_values.clear
+          variant.product.option_types.each do |ot|
+            variant.option_values << OptionValue.find(session[:products][ot.name.to_sym])
           end
+          # variant.product.option_types.map {|option| option.name}.each do |option_name|
+          #   session[:products].each do |product|
+          #     variant.option_values << OptionValue.find(product[option_name.to_sym])
+              
+          #   end
+          # end
+          # session[:products].each do |variant|
+          #   variant = Variant.find(variant[:variant_id].to_i)
+          #   variant.option_values.clear
+          #   variant.product.option_types.map {|option| option.name}.each do |option_name|
+          #     session[:products].each do |product|
+          #       variant.option_values << OptionValue.find(product[option_name.to_sym])
+          #     end
+          #   end
+          # end
         end
       end
       
       def check_variant
-        variant = Variant.find(session[:products].first[:variant_id])
+        variant = Variant.find(session[:products][:variant_id])
         unless variant.in_stock? && variant.available?
           flash[:notice] = 'Sorry but the product has been sold or not available'
           redirect_to root_path and return
@@ -150,15 +176,19 @@ class QuickAuctionExtension < Spree::Extension
     end
     
     Spree::BaseHelper.class_eval do
+      # Return a string with variant options and values
       def variant_options_session(variant)
         return '' unless session.include?(:products)
-        session[:products].each do |x|
-          if x[:variant_id].to_i == variant.id
-            return "Size: #{OptionValue.find(x[:size]).presentation}, Sex: #{OptionValue.find(x[:sex]).presentation}<br />"
+        to_out = []
+        if session[:products][:variant_id] == variant.id
+          variant.product.option_types.each do |ot|
+            to_out << "#{ot.presentation}: #{OptionValue.find(session[:products][ot.name.to_sym]).presentation}"
           end
         end
+        to_out.join(', ')
       end
       
+      # Show two times available_on and availbale_off in right format
       def show_available_times(product)
         return_time = { }
         if product.available_on.nil?
