@@ -102,15 +102,17 @@ class QuickAuctionExtension < Spree::Extension
     end
     
     Admin::ProductsController.class_eval do
-      after_filter :change_prices, :only => :update
       before_filter :fix_on_hand, :only => :update
+      after_filter :add_variants, :only => :update
       
+      # When we try to update product edit page, rails send on_hand in params
+      # It's must me deleted when products already has a variants
       def fix_on_hand
-        params[:product].delete(:on_hand) if !Product.find_by_permalink(params[:id]).variants.blank?
+        params[:product].delete(:on_hand) unless Product.find_by_permalink(params[:id]).variants.blank?
       end
       
-      # Set it before_filter, coz we have error hand_on
-      def change_prices
+      # Add variont to Product. See method @product.change_variants
+      def add_variants
         @product.change_variants if @product.variants.blank?
       end
       
@@ -139,7 +141,6 @@ class QuickAuctionExtension < Spree::Extension
       
       def check_variant
         variant = Variant.find(session[:products].first[:variant_id])
-        debugger
         unless variant.in_stock? && variant.available?
           flash[:notice] = 'Sorry but the product has been sold or not available'
           redirect_to root_path and return
