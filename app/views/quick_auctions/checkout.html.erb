@@ -24,16 +24,19 @@
             <%= option_value.presentation %>
           </label>
           <%= radio_button_tag option_type.name, option_value.id, check_variants(option_type, option_value) %>
-
         </div>
       <% end %>
     </div>
   <% end %>
   <button class="buy_now" type="submit"></button>
 <% end %>
-    
+
 <div id="product-description" class="product-description">
-  <%= @product.description.gsub(/^(.*)$/, '<p>\1</p>') rescue t("product_has_no_description") %>
+  <% if @product.description.blank? %>
+    <center><h3><%= t("product_has_no_description") %></h3></center>
+  <% else %>
+    <%= @product.description.gsub(/^(.*)$/, '<p>\1</p>') rescue t("product_has_no_description") %>
+  <% end %>
 </div>    
 
 <script type="text/javascript"> 
